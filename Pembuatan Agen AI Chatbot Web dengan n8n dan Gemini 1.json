@@ -1,0 +1,116 @@
+{
+  "name": "Pembuatan Agen AI Chatbot Web dengan n8n dan Gemini 1",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! 👋\nSelamat datang di chatbot informasi Bawaslu Kota Depok.\n\nSaya adalah asisten virtual yang siap membantu memberikan informasi terkait tugas dan fungsi Bawaslu, kegiatan pengawasan pemilu, berita, program, serta layanan pengaduan masyarakat di Bawaslu Kota Depok.\n\nSilakan ajukan pertanyaan Anda, dan saya akan berusaha membantu memberikan informasi yang Anda butuhkan.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -352,
+        -16
+      ],
+      "id": "b5d580a4-b488-4151-8924-10fd87783fe5",
+      "name": "When chat message received",
+      "webhookId": "fcbed1db-7cd5-4ae4-89fb-e090b9fdcc09"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah agen AI yang dapat menjawab pertanyaan dan memberikan informasi serta saran kepada pengguna terkait kegiatan, program, dan layanan yang diselenggarakan oleh Bawaslu Kota Depok. Tugasmu adalah membantu pengguna memahami peran dan fungsi Bawaslu, memberikan informasi mengenai pengawasan pemilu, layanan pengaduan masyarakat, kegiatan sosialisasi, berita, serta program yang dijalankan oleh Bawaslu Kota Depok.\n\nDalam memberikan jawaban, gunakan informasi yang tersedia dari website resmi http://kotadepok.bawaslu.go.id/\n sebagai sumber utama data dan referensi.\n\nBerikan jawaban yang jelas, ramah, dan informatif. Jika pengguna membutuhkan informasi lebih lanjut atau data yang tidak tersedia, arahkan mereka untuk mengunjungi website resmi tersebut atau menghubungi pihak Bawaslu Kota Depok melalui kanal resmi yang tersedia."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -144,
+        -16
+      ],
+      "id": "e4c962d6-a9b3-4c01-b176-5df96c11a1e8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        144
+      ],
+      "id": "84daeecd-923f-48da-b52a-14388e9056d3",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "iiv09045coOKhuGr",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -48,
+        144
+      ],
+      "id": "6ff8c8b8-ddcb-47af-be89-7e3ff30c0185",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "9d30786e-0ec2-42cd-b767-f18821de8d29",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3ab9fa5164944e98d620c601667a960abca59b70ea87c056f1c3a6a229b2b94b"
+  },
+  "id": "zgAStfl8sltWuWOH",
+  "tags": []
+}
